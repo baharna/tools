@@ -1,3 +1,4 @@
+#nmap_parser.py
 ./nmap_parser.py -h
 usage: nmap_parser.py [-h] -f FILENAME [-r {detailed,host,port,csv}]
                       [--hosts HOSTS] [--ports PORTS]
