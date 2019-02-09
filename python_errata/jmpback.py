@@ -5,10 +5,16 @@
 import argparse
 
 def main(args):
-    jump_bytes = int(args.jump) -1
-    max_value = 255
-    offset = hex(255 - jump_bytes)
-    print("The hex value to jump " + args.jump + " bytes is: " + offset)
+    # Sets values for short jumps
+    if int(args.jump) < 128:
+        jump_bytes = int(args.jump) -1
+        max_value = 255
+    # sets values for near jumps
+    else:
+        jump_bytes = int(args.jump) -1
+        max_value = 4294967295
+    offset = hex(max_value - jump_bytes)
+    print("The opcode to jump " + args.jump + " bytes is: " + offset)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
