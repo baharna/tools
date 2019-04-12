@@ -1,11 +1,12 @@
 #!/usr/bin/python3
+# Simple fuzzer that looks for SQLi in parameters taken from a request saved in a file
+# Tested using Badtore VM from https://www.vulnhub.com/entry/badstore-123,41/
 
 import requests
 import argparse
 import urllib3
 
 def test(post_string, url):
-    #urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     params = post_string.split("&")
     count = 0
     vuln = []
@@ -38,11 +39,13 @@ def main(args):
         if "Host:" in line:
             host = line.split(" ")[1]
         if "POST" in line:
-            url = line.split(" ")[1]
+            url = line.split(" ")[1] 
+    # checks for https and sets prepend value accordingly
     if args.https:
         prepend = "https://"
     else:
         prepend = "http://"
+    # sets the url and sends it with the post sting to the test function
     if host and url:
         url = prepend + host.strip() + url
         test(post_string.strip(), url)
@@ -50,6 +53,9 @@ def main(args):
         print("Request format invalid, check the file")
 
 if __name__ == "__main__":
+    # takes in filename and optional https option
+    # https doesn't want to work with badstore, even with verify turned off
+    # possible I'm just bad, will keep trying later
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--filename", required=True, help="file containing POST request to extract data from")
     parser.add_argument("--https", required=False, action="store_true", help="specify connecting to an https site")
